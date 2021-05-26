@@ -1,0 +1,159 @@
+<div class="p-grid">
+	<div class="p-col-12">
+
+		<p-toast></p-toast>
+
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+					<button pButton pRipple label="Add New Customer" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="openNew()"></button>
+				</ng-template>
+			</p-toolbar>
+
+			<p-table #dt [value]="customers" class="p-datatable-responsive" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['firstName', 'lastName']" [rowHover]="true" dataKey="id"
+					 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0">Manage Customer</h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th pSortableColumn="firstName">First Name <p-sortIcon field="firstName"></p-sortIcon></th>
+						<th pSortableColumn="lastName">Last Name <p-sortIcon field="lastName"></p-sortIcon></th>
+						<th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+						<th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th>
+						<th pSortableColumn="address">Address <p-sortIcon field="address"></p-sortIcon></th>
+						<th pSortableColumn="addedDate">Added Date <p-sortIcon field="addedDate"></p-sortIcon></th>
+						<th>Action</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-product>
+					<tr>
+                        <td><span class="p-column-title">First Name</span>
+                            {{product.firstName}}
+                        </td>
+                        <td><span class="p-column-title">Last Name</span>
+                            {{product.lastName}}
+                        </td>
+                        <td><span class="p-column-title">Email</span>
+                            {{product.email}}
+                        </td>
+                        <td><span class="p-column-title">Phone</span>
+                            {{product.phone}}
+                        </td>
+                        <td><span class="p-column-title">Address</span>
+                            {{product.address}}
+                        </td>
+                        <td><span class="p-column-title">Added Date</span>
+                            {{product.addedDate | date}}
+                        </td>
+                        <td>
+							<button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2" (click)="showDetailDialog(product)"></button>
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</div>
+
+	</div>
+</div>
+
+
+<p-dialog [(visible)]="addCustomerDialog" [style]="{width: '450px'}" header="Add New Customer" [modal]="true"
+	styleClass="p-fluid">
+	<ng-template pTemplate="content">
+
+		<form [formGroup]="customerForm" (ngSubmit)="addCustomer()">
+			<div class="p-field">
+
+				<div class="pl-2" [style.color]="'red'" *ngIf="firstName.invalid && submitted">
+					<span *ngIf="firstName.errors.required" class="error-msg">
+						First Name is required.
+					</span>
+				</div>
+				<input type="text" formControlName="firstName" placeholder="Enter First Name"
+					pInputText />
+			</div>
+
+			<div class="p-field">
+
+				<div class="pl-2" [style.color]="'red'" *ngIf="lastName.invalid && submitted">
+                    <span *ngIf="lastName.errors.required" class="error-msg">
+						Last Name is required.
+					</span>
+				</div>
+				<input type="text" formControlName="lastName" placeholder="Enter Last Name"
+					pInputText />
+			</div>
+
+			<div class="p-field">
+
+				<div class="pl-2" [style.color]="'red'" *ngIf="email.invalid && submitted">
+					<span *ngIf="email.errors.required" class="error-msg">
+						Email is required.
+					</span>
+				</div>
+				<input type="text" formControlName="email" placeholder="Enter your email"
+					pInputText />
+			</div>
+
+			<div class="p-field">
+
+				<div class="pl-2" [style.color]="'red'" *ngIf="phone.invalid && submitted">
+					<span *ngIf="phone.errors.required" class="error-msg">
+						Phone is required.
+					</span>
+				</div>
+				<input type="text" formControlName="phone" placeholder="Enter your phone"
+					pInputText />
+			</div>
+
+			<div class="p-field">
+
+				<div class="pl-2" [style.color]="'red'" *ngIf="address.invalid && submitted">
+					<span *ngIf="address.errors.required" class="error-msg">
+						Address is required.
+					</span>
+				</div>
+				<input type="text" formControlName="address" placeholder="Enter your address"
+					pInputText />
+			</div>
+		</form>
+
+
+	</ng-template>
+
+	<ng-template pTemplate="footer">
+		<button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+		<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="addCustomer()"></button>
+	</ng-template>
+</p-dialog>
+
+
+<p-dialog [(visible)]="customerDialog" [style]="{width: '50vw'}" header="Customer Storage" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+
+		<p-dataView #dv [value]="customer?.storageList" [paginator]="true" [rows]="10" filterBy="name" [alwaysShowPaginator]="false">
+				<ng-template let-stores pTemplate="listItem">
+					<div class="p-col-6">
+						<div class="product-list-item">
+							<img [src]="'assets/demo/images/product/brown-purse.jpg'"  />
+							<div class="product-list-detail">
+								<div class="product-name">Store# {{stores.storeIdentifier}}</div>
+								<div class="product-description">{{stores.description}}</div>
+								<div class="product-description">{{stores.name}}</div>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</p-dataView>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDetailDialog()"></button>
+    </ng-template>
+</p-dialog>

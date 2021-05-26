@@ -1,0 +1,59 @@
+/* You can add global styles to this file, and also import other style files */
+$gutter: 1rem; //for primeflex grid system
+
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+@import "../node_modules/prismjs/themes/prism-coy.css";
+@import "../node_modules/@fullcalendar/core/main.min.css";
+@import "../node_modules/@fullcalendar/daygrid/main.min.css";
+@import "../node_modules/@fullcalendar/timegrid/main.min.css";
+@import "assets/demo/flags/flags.css";
+
+
+
+.p-datatable-responsive .p-datatable .p-datatable-tbody > tr > td .p-column-title {
+    display: none !important;
+}
+.p-datatable-responsive .p-datatable-wrapper{
+    min-height: 20rem;
+}
+@media screen and (max-width: 767px) {
+    .p-datatable-responsive .p-datatable {
+        .p-datatable-thead > tr > th,
+        .p-datatable-tfoot > tr > td {
+            display: none !important;
+        }
+
+        .p-datatable-tbody > tr > td {
+            text-align: left;
+            display: block;
+            width: 100%;
+            float: left;
+            clear: left;
+            border: 0 none;
+
+            .p-column-title {
+                padding: .4rem;
+                min-width: 30%;
+                display: inline-block !important;
+                margin: -.4em 1em -.4em -.4rem;
+                font-weight: bold;
+            }
+
+            &:last-child {
+                border-bottom: 1px solid var(--surface-d);
+            }
+        }
+    }
+}
+
+.p-dialog .p-dialog-content {
+    min-height: 300px !important;
+}
+
+.p-dataview .p-dataview-emptymessage {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 3rem 1rem;
+}

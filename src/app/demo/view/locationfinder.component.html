@@ -1,0 +1,86 @@
+<div class="p-grid list-demo">
+    <div class="p-col-12">
+        <div class="card">
+            <h5>Locations</h5>
+            <p-dataView #dv [value]="locationList" [paginator]="true" [rows]="25" filterBy="name" [alwaysShowPaginator]="false">
+                <ng-template let-location pTemplate="listItem">
+                    <div class="p-col-4 locations">
+                        <div class="product-list-item" (click)="selectLocation(location)">
+                            <img [src]="'assets/demo/images/galleria/galleria5s.jpg'" />
+                            <div class="product-list-detail">
+                                <div class="product-name">{{location.locationName}}</div>
+                                <div class="product-description">{{location.address}}</div>
+                                <div class="product-description">{{location.phone}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataView>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="storageDialog" [style]="{'width': '850px','minHeight': '300px'}" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="header">
+        <h5>{{ location?.locationName }}</h5>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <p-dataView #dv [value]="storeList" [paginator]="true" [rows]="25" filterBy="name" [alwaysShowPaginator]="false">
+            <ng-template let-store pTemplate="listItem">
+                <div class="p-col-6 store">
+                    <div class="product-list-item">
+                        <img [src]="'assets/demo/images/product/brown-purse.jpg'" />
+                        <div class="product-list-detail">
+                            <div class="product-name">Store# {{store.storeIdentifier}}</div>
+                            <div class="product-description">{{store.description}}</div>
+                            <div class="product-description">{{store.name}}</div>
+
+                        </div>
+                        <div class="product-list-action">
+                            <span class="product-price">${{store.price}}</span>
+                            <p-button icon="pi pi-shopping-cart" label="Select"
+                                [disabled]="store.status === 'UnAvailable'" (click)="newBooking(store.storageId)">
+                            </p-button>
+                            <span [class]="'product-badge status-' + store.status.toLowerCase()">{{store.status}}</span>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dataView>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+            (click)="hideStorageDialog()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="bookStorage" [style]="{width: '550px',height: '300px'}" header="Book Storage" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <form [formGroup]="assingStorageForm" (ngSubmit)="assignStorageToCustomer()">
+            <div class="p-field">
+                <p>Select Customer</p>
+            </div>
+            <div class="p-field">
+                <div class="pl-2" [style.color]="'red'" *ngIf="customerInfoID.invalid && submitted">
+                    <span *ngIf="customerInfoID.errors.required" class="error-msg">
+                        Customer is required.
+                    </span>
+                </div>
+                <p-dropdown optionLabel="name" optionValue="customerInfoId" [options]="customers"
+                    [style]="{ width: '100%' }" formControlName="customerInfoID"></p-dropdown>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+            (click)="hideBookingDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+            (click)="assignStorageToCustomer()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>

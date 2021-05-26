@@ -1,0 +1,43 @@
+<div class="login-body">
+    <div class="login-wrapper">
+        <div class="login-panel">
+            <a  class="logo">
+                
+            </a>
+            
+            <form [formGroup]="loginForm" (ngSubmit)="login()">
+                <div class="login-form">
+                    <h2>Login to Storage Demo App</h2>
+                    <p>You don't have an account? <a href="#"> Login Directly</a></p>
+
+                    <div class="pl-2" [style.color]="'yellow'" *ngIf="username.invalid && submitted">
+                        <span *ngIf="username.errors.required" class="error-msg">
+                          Email Address is required.
+                        </span>
+                      </div>
+
+                    <input type="text" class="form-control" formControlName="username" autocomplete="off" pInputText placeholder="Email">
+
+
+                    <div class="pl-2" [style.color]="'yellow'" *ngIf="password.invalid && submitted">
+                        <span *ngIf="password.errors.required" class="error-msg">
+                          Password is required.
+                        </span>
+                      </div>
+                    <input type="password" class="form-control" formControlName="password" autocomplete="off" pInputText placeholder="Password">
+
+                    <div class="pl-2" [style.color]="'yellow'" *ngIf="invalidLoginCredentials">
+                        Invalid Email or Password.
+                      </div>
+
+                    <button pButton pRipple label="LOGIN" type="button" (click)="login()"></button>
+
+                    
+
+                </div>
+            </form>
+
+            <p>Storage Box Demo Application - FrontDeskApp</p>
+        </div>
+    </div>
+</div>

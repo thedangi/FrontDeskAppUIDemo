@@ -1,0 +1,122 @@
+<div class="p-grid list-demo">
+	<div class="p-col-12">
+		<div class="card">
+			<h5>Storage Dashboard</h5>
+			<p-dataView #dv [value]="storeList" [paginator]="true" [rows]="25" filterBy="name" [alwaysShowPaginator]="false">
+				<ng-template pTemplate="header">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
+						<button pButton pRipple label="Add New Storage" icon="pi pi-plus" class="p-button-success p-mr-2"
+							(click)="addNewCustomer()"></button>
+						<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-end">
+							<p-dropdown [options]="storageTypes" placeholder="Filter By Size" optionLabel="name" optionValue="storageTypeId"
+						(onChange)="onChange($event.value)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
+						<button pButton pRipple label="UnAssign All Customers" icon="pi pi-trash" class="p-button-danger p-ml-4"
+							(click)="unAssignAllCustomers()"></button>
+						</div>
+					</div>
+				</ng-template>
+				<ng-template let-stores pTemplate="listItem">
+					<div class="p-col-6">
+						<div class="product-list-item">
+							<img [src]="'assets/demo/images/product/brown-purse.jpg'"  />
+							<div class="product-list-detail">
+								<div class="product-name">Store# {{stores.storeIdentifier}}</div>
+								<div class="product-description">{{stores.description}}</div>
+								<div class="product-description">{{stores.name}}</div>
+								
+							</div>
+							<div class="product-list-action">
+								<span class="product-price">${{stores.price}}</span>
+								<p-button icon="pi pi-shopping-cart" label="Select"
+									[disabled]="stores.status === 'UnAvailable'" (click)="newBooking(stores.storageId)">
+								</p-button>
+								<span
+									[class]="'product-badge status-' + stores.status.toLowerCase()">{{stores.status}}</span>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</p-dataView>
+		</div>
+	</div>
+</div>
+
+<p-dialog [(visible)]="openAddCustomer" [style]="{width: '450px',height: '300px'}" header="Add New Storage" [modal]="true"
+	styleClass="p-fluid">
+	<ng-template pTemplate="content">
+
+		<form [formGroup]="customerForm" (ngSubmit)="addStorage()">
+			<div class="p-field">
+				<div class="pl-2" [style.color]="'red'" *ngIf="price.invalid && submitted">
+					<span *ngIf="price.errors.required" class="error-msg">
+						Price is required.
+					</span>
+				</div>
+				<input type="text" class="form-control" formControlName="price" placeholder="Enter Price"
+					pInputText />
+			</div>
+			<div class="p-field">
+				<div class="pl-2" [style.color]="'red'" *ngIf="storeIdentifier.invalid && submitted">
+					<span *ngIf="storeIdentifier.errors.required" class="error-msg">
+						Store Identifier is required.
+					</span>
+				</div>
+				<input type="text" class="form-control" formControlName="storeIdentifier" placeholder="Enter Store Identifier"
+					pInputText />
+			</div>
+			<div class="p-field">
+				<div class="pl-2" [style.color]="'red'" *ngIf="price.invalid && submitted">
+					<span *ngIf="price.errors.required" class="error-msg">
+						Storage Type is required.
+					</span>
+				</div>
+				<p-dropdown
+				optionLabel="name" optionValue="storageTypeId"
+				[options]="storageTypes"
+				[style]="{ width: '100%' }"
+				formControlName="storageTypeID"
+				></p-dropdown>
+			</div>
+		</form>
+
+
+	</ng-template>
+
+	<ng-template pTemplate="footer">
+		<button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+		<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="addStorage()"></button>
+	</ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="bookStorage" [style]="{width: '450px',height: '300px'}" header="Book Storage" [modal]="true"
+	styleClass="p-fluid">
+	<ng-template pTemplate="content">
+		<form [formGroup]="assingStorageForm" (ngSubmit)="assignStorageToCustomer()">
+		<div class="p-field">
+			<p>Select Customer</p>
+		</div>
+		<div class="p-field">
+			<div class="pl-2" [style.color]="'red'" *ngIf="storageCustomerInfoID.invalid && submitted">
+				<span *ngIf="storageCustomerInfoID.errors.required" class="error-msg">
+					Customer is required.
+				</span>
+			</div>
+			<p-dropdown
+			optionLabel="name" optionValue="customerInfoId"
+			[options]="customers"
+			[style]="{ width: '100%' }"
+			formControlName="customerInfoID"
+			></p-dropdown>
+		</div>
+		</form>
+	</ng-template>
+
+	<ng-template pTemplate="footer">
+		<button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+			(click)="hideBookingDialog()"></button>
+		<button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="assignStorageToCustomer()"></button>
+	</ng-template>
+
+</p-dialog>
+
+<p-toast></p-toast>
