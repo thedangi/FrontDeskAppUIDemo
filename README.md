@@ -1,4 +1,4 @@
-# Poseidon
+# Anuglar Project build using template Poseidon from Primeng
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.30.
 
